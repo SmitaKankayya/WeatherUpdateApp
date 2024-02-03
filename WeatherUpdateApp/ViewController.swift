@@ -29,39 +29,32 @@ class ViewController: UIViewController {
             label!.layer.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.2).cgColor
         }
         
-        func addGradient(to view: UIView, colors: [UIColor], startPoint: CGPoint, endPoint: CGPoint) {
-            let gradientLayer = CAGradientLayer()
-            gradientLayer.frame = view.bounds
-            gradientLayer.colors = colors.map { $0.cgColor }
-            gradientLayer.startPoint = startPoint
-            gradientLayer.endPoint = endPoint
-            view.layer.insertSublayer(gradientLayer, at: 0)
-        }
-        
         addGradient(to: view, colors: [UIColor.systemBlue, UIColor.systemGreen], startPoint: CGPoint(x: 0, y: 0), endPoint: CGPoint(x: 1, y: 1))
         addGradient(to: refreshDataButton, colors: [UIColor.systemRed, UIColor.systemBlue], startPoint: CGPoint(x: 0, y: 0), endPoint: CGPoint(x: 1, y: 1))
         
         fetchdata()
     }
     
+    func addGradient(to view: UIView, colors: [UIColor], startPoint: CGPoint, endPoint: CGPoint) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = view.bounds
+        gradientLayer.colors = colors.map { $0.cgColor }
+        gradientLayer.startPoint = startPoint
+        gradientLayer.endPoint = endPoint
+        view.layer.insertSublayer(gradientLayer, at: 0)
+    }
     
-    
-    func fetchdata()
-    {
+    func fetchdata(){
         let url = URL(string: "https://api.weatherapi.com/v1/current.json?key=65a7aea3e395474187a20653220504&q=india&aqi=no")
         let dataTask = URLSession.shared.dataTask(with: url!) { data, response, error in
-            guard let data = data , error == nil else
-            {
+            guard let data = data , error == nil else {
                 print("Error Occured While Accessing Data with URL")
                 return
             }
             var fullWeatherData: WeatherData?
-            do
-            {
+            do {
                 fullWeatherData = try JSONDecoder().decode(WeatherData.self, from: data)
-            }
-            catch
-            {
+            } catch {
                 print("Error Occured While Decodeing JSON into Swift Structure \(error)")
             }
             DispatchQueue.main.async {
@@ -77,12 +70,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func refreshData(_ sender: Any) {
-        
         fetchdata()
-        
-        
-        
-        
     }
     
 }
